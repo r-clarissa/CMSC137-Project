@@ -19,7 +19,7 @@ public class Main extends Application {
 		TitleScreen theGameTitle = new TitleScreen();
 		theGameTitle.setStage(stage);
 
-		// NEW COMMENT
+		// NEW COMMENT - test
 	}
 
 }
