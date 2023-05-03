@@ -3,7 +3,7 @@
   <h1 align="center">Pandemic Hero</h1>
 
   <p align="center">
-    Welcome to the codebase for STALS project! This README file contains all the information you need to contribute to this project.
+    Welcome to the codebase for CMSC 137 project! This README file contains all the information you need to contribute to this project.
     <br />
     <br />
     <a href="https://docs.google.com/spreadsheets/d/1aKWxqGMbyEnyWf6LY2PL20jWq92p4WXMJ-gG6z7noeg/edit?usp=sharing">Task Tracker</a>
