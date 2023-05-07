@@ -10,6 +10,8 @@
     •
     <a href="https://www.figma.com/file/sxtUN2W2v9hoBDgicC5VZY/CMSC-137%3A-The-Pandemic-Hero-Game?node-id=0%3A1&t=1se8tmSqt8tgjxvd-1">Wireframes</a>
     •
+     <a href="https://lucid.app/lucidchart/0d0bc8c3-1ffe-4e19-baac-5c1cb9abb395/edit?invitationId=inv_3be17a99-adcf-4687-8627-8297eafeb98d&page=HWEp-vi-RSFO#">UML</a>
+     •
      <a href="https://drive.google.com/drive/folders/12dNzwNXSyomnyB5SFX7v0bKPeh8jNTA-?usp=sharing">GDrive</a>
     <br>
   </p>
