@@ -15,6 +15,3 @@
   </p>
 </div>
 
-
-### Project Specifications (TODO)
-
