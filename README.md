@@ -1,7 +1,5 @@
-<br />
 <div align="center">
   <h1 align="center">Pandemic Hero</h1>
-
   <p align="center">
     Welcome to the codebase for CMSC 137 project! This README file contains all the information you need to contribute to this project.
     <br />
