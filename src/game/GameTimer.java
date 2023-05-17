@@ -6,6 +6,8 @@ import java.util.Random;
 // import application.Fish;
 // import application.Doctor;
 import javafx.animation.AnimationTimer;
+import javafx.animation.PauseTransition;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -16,6 +18,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
+import javafx.util.Duration;
 import stages.GameStage;
 
 /*
@@ -56,7 +59,7 @@ public class GameTimer extends AnimationTimer{
 		//Instantiate the ArrayList of powerups
 		this.powerups = new ArrayList<PowerUps>();
 		//call the spawnViruses method
-		this.spawnViruses();
+		this.spawnViruses(0);
 		//call method to handle mouse click event
 		this.boss = new BigBoss(this);
 		this.handleKeyPressEvent();
@@ -84,9 +87,34 @@ public class GameTimer extends AnimationTimer{
 		//render myDoctor
 		this.myDoctor.render(this.gc);
 
+
 		// Schedule to spawn a virus every 5 seconds
+
+		if(time==90 || time==185 || time== 275){
+			viruses.removeAll(viruses);
+			this.stop();
+			PauseTransition transition = new PauseTransition(Duration.seconds(5));
+			transition.play();
+			transition.setOnFinished(new EventHandler<ActionEvent>() {
+				public void handle(ActionEvent arg0) {
+					start();
+				}
+			});
+
+
+		}
+
 		if (time%5==0 && virusSpawning && time!=0) {
-			this.spawnViruses();
+
+			if(time<90){
+
+				this.spawnViruses(0);
+			}else if(time==95 || time <185){
+
+				this.spawnViruses(10);
+			}else if(time==190 || time<280){
+				this.spawnViruses(15);
+			}
 			if (time>30 && this.boss.isAlive()) bossShootVirus();	//Shoots a larger virus every 5 seconds upon boss started moving.
 			virusSpawning = false;
 		} else if (time%5!=0) virusSpawning = true;
@@ -126,13 +154,13 @@ public class GameTimer extends AnimationTimer{
 		if (this.boss.isAlive()) this.boss.showBossLife();
 
 		// If 1:00 time has elapsed and the doctor is not alive, the player loses.
-		if (time%60!=0 && !this.myDoctor.isAlive()) {
+		if (time%90!=0 && !this.myDoctor.isAlive()) {
 			this.stop();
 			this.gs.flashResults(GameStage.LOSE);
 		}
 
 		// If 1:00 time has elapsed and the doctor is still alive, the player wins.
-		if(time == 60){
+		if(time == 270){
 			this.stop();
 			this.gs.flashResults(GameStage.WINNER);
 			this.startmilisec = System.currentTimeMillis();
@@ -194,13 +222,13 @@ public class GameTimer extends AnimationTimer{
 
 	//called in GameTimer constructor.
 	//method that will spawn/instantiate three fishes at a random x,y location
-	private void spawnViruses(){
+	private void spawnViruses(int additionalVirus){
 		int numViruses = 0;
 
 		if (gameStart) {
 			numViruses = NUM_VIRUSES_INITIAL_START;
 			this.gameStart = false;
-		} else numViruses = MAX_NUM_VIRUSES;
+		} else numViruses = MAX_NUM_VIRUSES + additionalVirus;
 
 		Random r = new Random();
 		for(int i=0;i<numViruses;i++){
@@ -214,6 +242,7 @@ public class GameTimer extends AnimationTimer{
 		}
 
 	}
+
 
 	//called every handle every 8 seconds to allow boss shoot a virus
 	private void bossShootVirus() {

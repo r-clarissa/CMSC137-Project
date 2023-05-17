@@ -26,6 +26,7 @@ public class GameStage {
 	public final static int LOSE = 2;
 
 	public final static Image bg = new Image("images/Background.png", 800, 500, false, false);
+	public final static Image bg2 = new Image("images/Hospital.png", 800, 500, false, false);
 	public final static Image icon = new Image("images/Virus.png");
 	public final static Image blank = new Image("images/Blank.png", 0, 0, false, false);
 
@@ -68,6 +69,8 @@ public class GameStage {
 			}
 		});
 	}
+
+
 
 }
 
