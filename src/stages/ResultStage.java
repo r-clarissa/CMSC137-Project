@@ -1,113 +1,62 @@
 package stages;
 
-import stages.SuperStage;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontPosture;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
-import javafx.stage.Stage;
-
-// Note: When initializing results stage, set the score first before the stage.
+import javafx.scene.input.MouseEvent;
 
 public class ResultStage {
-
 	private Group root;
 	private Scene scene;
-
 	private GraphicsContext gc;
 	private Canvas canvas;
 
-	private Integer score;
-
-	public ResultStage() {
+	ResultStage (int num){
 		this.root = new Group();
 		this.scene = new Scene(root, SuperStage.WINDOW_WIDTH, SuperStage.WINDOW_HEIGHT);
-
 		this.canvas = new Canvas(SuperStage.WINDOW_WIDTH, SuperStage.WINDOW_HEIGHT);
 		this.gc = canvas.getGraphicsContext2D();
+		this.setStage(num);
+
 	}
 
-	// Method for setting up the title stage
-	public void setStage(Stage stage, boolean isWinner) {
-
+	private void setStage(int outcome){
+		// TODO Auto-generated method stub
 		gc.clearRect(0, 0, SuperStage.WINDOW_WIDTH, SuperStage.WINDOW_HEIGHT);
 
-		Text score = new Text(this.score.toString());
-		if (isWinner) {
-			gc.drawImage(SuperStage.winnerPage, 0, 0);
-			designText(score, SuperStage.yellow);
-		}
-		else {
-			gc.drawImage(SuperStage.gameoverPage, 0, 0);
-			designText(score, SuperStage.red);
+		if(outcome == GameStage.WINNER){
+			gc.drawImage(SuperStage.winner, 0, 0);
+		} else if (outcome == GameStage.LOSE){
+			gc.drawImage(SuperStage.loser, 0, 0);
 		}
 
-		// Play Again Btn
-		Button playAgainBtn = new Button("Play Again");
-		SuperStage.designBtn(422, 375, playAgainBtn);
+		Button exitbtn = new Button("Exit");
+		SuperStage.designBtn(440, 540, exitbtn);
 
-		playAgainBtn.setOnMouseClicked(new EventHandler<Event>() {
-			@Override
-			public void handle(Event event) {
-				SelectTokenStage selectTokenStage = new SelectTokenStage();
-				selectTokenStage.setStage(stage);
-			}
-		});
+//		Button backbtn = new Button("Back to Main");
+//		SuperStage.designBtn(790, 540, backbtn);
 
-		// Back to Main Menu
-		Button backMainMenu = new Button("Back to Main Menu");
-		SuperStage.designBtn(422, 466, backMainMenu);
-
-		backMainMenu.setOnMouseClicked(new EventHandler<Event>() {
-			@Override
-			public void handle(Event event) {
-				TitleScreen titleScreen = new TitleScreen();
-				titleScreen.setStage(stage);
-			}
-		});
-
-		// Exit Btn
-		Button exitBtn = new Button("Exit Game");
-		SuperStage.designBtn(422, 557, exitBtn);
-
-		exitBtn.setOnMouseClicked(new EventHandler<Event>() {
-			@Override
-			public void handle(Event event) {
+		exitbtn.setOnMouseClicked(new EventHandler<MouseEvent>() {
+			public void handle(MouseEvent arg0) {
 				System.exit(0);
 			}
 		});
 
-		this.root.getChildren().addAll(canvas, score, playAgainBtn, backMainMenu, exitBtn);
+//		backbtn.setOnMouseClicked(new EventHandler<MouseEvent>() {
+//			public void handle(MouseEvent arg0) {
+//				TitleScreen ts = new TitleScreen();
+//				ts.setStage(stage);
+//			}
+//		});
+//		this.root.getChildren().addAll(canvas, exitbtn, backbtn);
 
-		stage.setTitle("The Pandemic Hero");
-		stage.getIcons().add(SuperStage.icon);
-		stage.setScene(this.scene);
-		stage.show();
-
+		this.root.getChildren().addAll(canvas, exitbtn);
 	}
 
-	public void setScore(Integer score) {
-		this.score = score;
+	Scene getScene(){
+		return this.scene;
 	}
-
-	private void designText(Text text, Color color) {
-
-		Font font = Font.font("Source Sans Pro", FontWeight.BOLD, FontPosture.REGULAR, 65);
-
-		text.setX(681);
-		text.setY(336);
-		text.setFont(font);
-		text.setFill(color);
-		text.setStroke(Color.BLACK);
-		text.setStrokeWidth(0.25);
-	}
-
 }

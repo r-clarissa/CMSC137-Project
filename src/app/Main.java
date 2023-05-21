@@ -16,10 +16,6 @@ public class Main extends Application {
 
 		TitleScreen titleScreen = new TitleScreen();
 		titleScreen.setStage(stage);
-
-		/* test */
 	}
-
-
 
 }

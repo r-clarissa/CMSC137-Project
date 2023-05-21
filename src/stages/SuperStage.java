@@ -42,12 +42,18 @@ public class SuperStage {
 
 	// Stages
 	public final static Image landingPage = new Image("images/Colored Landing Page.png", WINDOW_WIDTH, WINDOW_HEIGHT, false, false);
+	public final static Image plainPage = new Image("images/Plain.png", WINDOW_WIDTH, WINDOW_HEIGHT, false, false);
+	public final static Image aboutPage = new Image("images/About.png", WINDOW_WIDTH, WINDOW_HEIGHT, false, false);
+	public final static Image instructionPage1 = new Image("images/Instruction 1.png", WINDOW_WIDTH, WINDOW_HEIGHT, false, false);
+	public final static Image instructionPage2 = new Image("images/Instruction 2.png", WINDOW_WIDTH, WINDOW_HEIGHT, false, false);
 	public final static Image selectTokenPage = new Image("images/Colored Select Token.png", WINDOW_WIDTH, WINDOW_HEIGHT, false, false);
 	public final static Image startCountdownPage = new Image("images/Colored Game Countdown.png", WINDOW_WIDTH, WINDOW_HEIGHT, false, false);
 	public final static Image resumeCountdownPage = new Image("images/Resume Countdown.png", WINDOW_WIDTH, WINDOW_HEIGHT, false, false);
 	public final static Image gameStagePage = new Image("images/Colored Game Stage.png", WINDOW_WIDTH, WINDOW_HEIGHT, false, false);
 	public final static Image winnerPage = new Image("images/Colored Congrats Prompt.png", WINDOW_WIDTH, WINDOW_HEIGHT, false, false);
 	public final static Image gameoverPage = new Image("images/Colored Game Over Prompt.png", WINDOW_WIDTH, WINDOW_HEIGHT, false, false);
+	public final static Image winner = new Image("images/Winner.png", WINDOW_WIDTH, WINDOW_HEIGHT, false, false);
+	public final static Image loser = new Image("images/Loser.png", WINDOW_WIDTH, WINDOW_HEIGHT, false, false);
 
 	public final static Image icon = new Image("images/Virus 1.png");
 
@@ -97,7 +103,6 @@ public class SuperStage {
 	public final static int BOSS3 = 3;
 	public final static int DEMAND = 4;
 
-
 	public static void designBtn(int x, int y, Button btn ) {
 
 		Font font = Font.font("Source Sans Pro", FontWeight.BOLD, FontPosture.REGULAR, 35);
@@ -136,5 +141,47 @@ public class SuperStage {
 
 		return btn;
 	}
+
+	// Gets token image based on selected token
+	public static Image getTokenImg(int type) {
+
+		Image tokenImg = token1_game;
+
+		switch(type) {
+			case 1: tokenImg = token1_game; break;
+			case 2: tokenImg = token2_game; break;
+			case 3: tokenImg = token3_game; break;
+			case 4: tokenImg = token4_game; break;
+		}
+		return tokenImg;
+	}
+
+	// Gets token image based on selected token
+	public static Image getBossImg(int type) {
+
+		Image bossImg = boss1;
+
+		switch(type) {
+			case 1: bossImg = boss1; break;
+			case 2: bossImg = boss2; break;
+			case 3: bossImg = boss3; break;
+		}
+		return bossImg;
+	}
+
+	/* TODO: implement change of amno based on token type */
+	public static Image getAmnoImg(int type) {
+
+		Image amnoImg = token1_ammo;
+
+		switch(type) {
+			case 1: amnoImg = token1_ammo; break;
+			case 2: amnoImg = token2_ammo;break;
+			case 3: amnoImg = token3_ammo; break;
+			case 4: amnoImg = token4_ammo;break;
+		}
+		return amnoImg;
+	}
+
 
 }
