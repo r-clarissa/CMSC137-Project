@@ -3,13 +3,11 @@ package stages;
 import stages.SuperStage;
 import javafx.animation.PauseTransition;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Button;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
@@ -28,12 +26,20 @@ public class TransitionStage {
 
 	private Text number;
 
+	private int tokenType;
+
 	public TransitionStage() {
+		new TransitionStage(1);
+	}
+
+	public TransitionStage(int tokenType) {
 		this.root = new Group();
 		this.scene = new Scene(root, SuperStage.WINDOW_WIDTH, SuperStage.WINDOW_HEIGHT);
 
 		this.canvas = new Canvas(SuperStage.WINDOW_WIDTH, SuperStage.WINDOW_HEIGHT);
 		this.gc = canvas.getGraphicsContext2D();
+		this.tokenType = tokenType;
+
 	}
 
 	// Method for setting up the title stage
@@ -74,7 +80,7 @@ public class TransitionStage {
 		gamestart.setOnFinished(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				GameStage gamestage = new GameStage();
+				GameStage gamestage = new GameStage(tokenType);
 				gamestage.setStage(stage);
 			}
 		});

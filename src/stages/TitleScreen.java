@@ -46,11 +46,35 @@ public class TitleScreen {
 		Button multiPlayerBtn = new Button("Multiplayer");
 		SuperStage.designBtn(750, 257, multiPlayerBtn);
 
+		multiPlayerBtn.setOnMouseClicked(new EventHandler<Event>() {
+			@Override
+			public void handle(Event event) {
+				SelectTokenStage selectTokenStage = new SelectTokenStage();
+				selectTokenStage.setStage(stage);
+			}
+		});
+
 		Button aboutBtn = new Button("About");
 		SuperStage.designBtn(750, 360, aboutBtn);
 
+		aboutBtn.setOnMouseClicked(new EventHandler<Event>() {
+			@Override
+			public void handle(Event event) {
+				About aboutStage = new About();
+				aboutStage.setStage(stage);
+			}
+		});
+
 		Button instructionBtn = new Button("Instructions");
 		SuperStage.designBtn(750, 462, instructionBtn);
+
+		instructionBtn.setOnMouseClicked(new EventHandler<Event>() {
+			@Override
+			public void handle(Event event) {
+				Instruction instructionStage = new Instruction();
+				instructionStage.setStage(stage);
+			}
+		});
 
 		this.root.getChildren().addAll(canvas, singlePlayerBtn, multiPlayerBtn, aboutBtn, instructionBtn);
 

@@ -23,6 +23,8 @@ public class SelectTokenStage {
 	private Button token4;
 	private Button startBtn;
 
+	private int tokenType;
+
 	public SelectTokenStage() {
 		this.root = new Group();
 		this.scene = new Scene(root, SuperStage.WINDOW_WIDTH, SuperStage.WINDOW_HEIGHT);
@@ -102,7 +104,7 @@ public class SelectTokenStage {
 
 			@Override
 			public void handle(Event event) {
-				TransitionStage countdown = new TransitionStage();
+				TransitionStage countdown = new TransitionStage(tokenType);
 				countdown.setStage(stage, false);
 			}
 		});
@@ -128,6 +130,7 @@ public class SelectTokenStage {
 		disableBtn(this.token3);
 		disableBtn(this.token4);
 		this.startBtn.setDisable(false);
+		tokenType = 1;
 	}
 
 	// Token 2 Chosen
@@ -136,22 +139,25 @@ public class SelectTokenStage {
 		disableBtn(this.token3);
 		disableBtn(this.token4);
 		this.startBtn.setDisable(false);
+		tokenType = 2;
 	}
 
-	// Token 2 Chosen
+	// Token 3 Chosen
 	private void token3Chosen() {
 		disableBtn(this.token1);
 		disableBtn(this.token2);
 		disableBtn(this.token4);
 		this.startBtn.setDisable(false);
+		tokenType = 3;
 	}
 
-	// Token 2 Chosen
+	// Token 4 Chosen
 	private void token4Chosen() {
 		disableBtn(this.token1);
 		disableBtn(this.token2);
 		disableBtn(this.token3);
 		this.startBtn.setDisable(false);
+		tokenType = 4;
 	}
 
 }
