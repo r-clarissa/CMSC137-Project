@@ -1,7 +1,15 @@
 package game;
 
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Scanner;
+
 
 // import application.Fish;
 // import application.Doctor;
@@ -12,6 +20,9 @@ import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
@@ -49,12 +60,25 @@ public class GameTimer extends AnimationTimer{
 	private BigBoss boss;
 	private BigBoss boss2;
 	private BigBoss boss3;
-
+	private DatagramSocket socket;
+    private InetAddress address;
+    private static final int SERVER_PORT = 8001; // send to server
+    private TextArea messageArea;
+    private TextField inputBox;
+    private String username;
 	private long startmilisec = System.currentTimeMillis();
+	private Group root;
 
-	public GameTimer(Group root, GraphicsContext gc, Scene theScene, GameStage gs, int tokenType){
+	public GameTimer(Group root, GraphicsContext gc, Scene theScene, GameStage gs, int tokenType,DatagramSocket socket, InetAddress address,TextArea messageArea,TextField inputBox,String username){
+
+		this.socket=socket;
+		this.address=address;
+		this.messageArea= messageArea;
+		this.inputBox=inputBox;
+		this.username=username;
 		this.gc = gc;
 		this.gs = gs;
+		this.root=root;
 		this.theScene = theScene;
 		this.myDoctor = new Player("Going merry",150,250, tokenType);
 		//instantiate the ArrayList of Virus
@@ -69,12 +93,21 @@ public class GameTimer extends AnimationTimer{
 
 		this.boss2 = new BigBoss(this, 2);
 		this.boss3 = new BigBoss(this, 3);
+
+
 	}
 
 	@Override
 	public void handle(long currentNanoTime) {
+//
 		gc.clearRect(0, 0, SuperStage.WINDOW_WIDTH, SuperStage.WINDOW_HEIGHT);
 		gc.drawImage(SuperStage.gameStagePage, 0, 0);
+
+//		Button button1 =new Button();
+//		button1.setOnAction(e -> System.out.println("avpogi"));
+//		this.root.getChildren().add(button1);
+
+
 
 		this.myDoctor.move();
 
@@ -191,6 +224,8 @@ public class GameTimer extends AnimationTimer{
 		}
 
 	}
+
+
 
 
 	// called to hide the powerups after 5 seconds of not obtaining.
@@ -481,7 +516,7 @@ public class GameTimer extends AnimationTimer{
 
 		if(ke==KeyCode.RIGHT) this.myDoctor.setDX(10);
 
-		if(ke==KeyCode.SPACE) this.myDoctor.shoot();
+		if(ke==KeyCode.E) this.myDoctor.shoot();
 
 		System.out.println(ke+" key pressed.");
    	}

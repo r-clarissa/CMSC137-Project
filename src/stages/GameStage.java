@@ -1,5 +1,10 @@
 package stages;
 
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+
 import game.GameTimer;
 import stages.SuperStage;
 import javafx.animation.PauseTransition;
@@ -9,9 +14,14 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
@@ -32,6 +42,7 @@ public class GameStage {
 
 	private Group root;
 	private Scene scene;
+	public  Scene chatScene;
 	private GameTimer gametimer;
 
 	private GraphicsContext gc;
@@ -43,9 +54,27 @@ public class GameStage {
 	private Text strength;
 	private Text score;
 
+	private DatagramSocket socket;
+    private InetAddress address;
+    private static final int SERVER_PORT = 8001; // send to server
+    private TextArea messageArea;
+    private TextField inputBox;
+    private String username;
+
 	private int tokenType;
 
-	public GameStage(int tokenType) {
+
+	public GameStage(int tokenType, DatagramSocket socket, InetAddress address,TextArea messageArea,TextField inputBox,String username) {
+
+
+		this.root= new Group();
+		this.socket=socket;
+		this.address=address;
+		this.messageArea= messageArea;
+		this.inputBox=inputBox;
+		this.username=username;
+
+
 		this.prompt = new ImageView();
 		this.life = new Text();
 		this.strength = new Text();
@@ -59,11 +88,12 @@ public class GameStage {
 
 		this.tokenType = tokenType;
 
-		this.gametimer = new GameTimer(this.root, this.gc, this.scene, this, tokenType);
+		this.gametimer = new GameTimer(this.root, this.gc, this.scene, this, tokenType,this.socket,this.address,this.messageArea,this.inputBox,this.username);
 	}
 
 	// Method for setting up the title stage
 	public void setStage(Stage stage) {
+		this.stage=stage;
 
 		gc.clearRect(0, 0, SuperStage.WINDOW_WIDTH, SuperStage.WINDOW_HEIGHT);
 		gc.drawImage(SuperStage.gameStagePage, 0, 0);
@@ -89,20 +119,68 @@ public class GameStage {
 //		stage.setScene(this.scene);
 //		stage.show();
 
-		this.stage = stage;
+		this.gametimer.start();
+		this.messageArea.setMaxWidth(500);
+        this.messageArea.setEditable(false);
 
-		this.root.getChildren().add(canvas);
+
+        this.inputBox.setMaxWidth(500);
+//        this.inputBox.setPadding(new Insets(100,100,100,100));
+
+
+        this.inputBox.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                String temp = this.username + ": " + this.inputBox.getText(); // message to send
+                messageArea.setText(messageArea.getText() + this.inputBox.getText() + "\n"); // update messages on screen
+                byte[] msg = temp.getBytes(); // convert to bytes
+                this.inputBox.setText(""); // remove text from input box
+
+                // create a packet & send
+                DatagramPacket send = new DatagramPacket(msg, msg.length, this.address, SERVER_PORT);
+                try {
+                    this.socket.send(send);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+
+
+
+
+
+        Button button1= new Button("go back to game");
+//        button1.setPadding(new Insets(100,100,100,100));
+
+        Button button2= new Button("go to chat");
+
+        button1.setOnAction(e ->  this.goBackToGame(button2));
+        button2.setOnAction(e ->this.goToChat(button1));
+
+
+
+        this.root.getChildren().addAll(canvas,button2);
 
 		this.stage.setTitle("The Pandemic Game");		// This sets the title of this application
 		this.stage.setScene(this.scene);
 		this.stage.getIcons().add(icon);				// This sets the icon for this application
 		this.stage.setResizable(false);					// Disables the stage to be resized
 
-		//invoke the start method of the animation timer
-		this.gametimer.start();
-
 		this.stage.show();
 
+	}
+
+	public void goToChat(Button button){
+		this.root.getChildren().clear();
+		VBox v1= new VBox(50);
+		v1.getChildren().addAll(messageArea, inputBox, button);
+		this.root.getChildren().add(v1);
+
+
+	}
+	public void goBackToGame(Button button){
+		this.root.getChildren().clear();
+		this.root.getChildren().addAll(canvas,button);
 	}
 
 	// Designs texts displayed

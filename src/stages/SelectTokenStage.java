@@ -1,4 +1,6 @@
 package stages;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
 
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -7,13 +9,15 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 
 public class SelectTokenStage {
 
 	private Group root;
 	private Scene scene;
-
 	private GraphicsContext gc;
 	private Canvas canvas;
 
@@ -25,9 +29,27 @@ public class SelectTokenStage {
 
 	private int tokenType;
 
-	public SelectTokenStage() {
+	private DatagramSocket socket;
+
+    private InetAddress address;
+
+    private TextArea messageArea;
+
+    private TextField inputBox;
+
+    private TextField getUsername= new TextField();
+
+    private String username="";
+
+	public SelectTokenStage(DatagramSocket socket, InetAddress address,TextArea messageArea,TextField inputBox) {
 		this.root = new Group();
 		this.scene = new Scene(root, SuperStage.WINDOW_WIDTH, SuperStage.WINDOW_HEIGHT);
+		this.socket=socket;
+		this.address=address;
+		this.messageArea=messageArea;
+		this.inputBox=inputBox;
+
+
 
 		this.canvas = new Canvas(SuperStage.WINDOW_WIDTH, SuperStage.WINDOW_HEIGHT);
 		this.gc = canvas.getGraphicsContext2D();
@@ -38,6 +60,15 @@ public class SelectTokenStage {
 
 		gc.clearRect(0, 0, SuperStage.WINDOW_WIDTH, SuperStage.WINDOW_HEIGHT);
 		gc.drawImage(SuperStage.selectTokenPage, 0, 0);
+
+		this.getUsername.setMaxWidth(500);
+        this.getUsername.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                this.username = this.getUsername.getText(); // message to send
+                System.out.println(this.username);
+
+            }
+        });
 
 
 		// Tokens
@@ -90,7 +121,7 @@ public class SelectTokenStage {
 
 			@Override
 			public void handle(Event event) {
-				TitleScreen titlescreen = new TitleScreen();
+				TitleScreen titlescreen = new TitleScreen(socket,address,messageArea,inputBox);
 				titlescreen.setStage(stage);
 			}
 		});
@@ -104,12 +135,12 @@ public class SelectTokenStage {
 
 			@Override
 			public void handle(Event event) {
-				TransitionStage countdown = new TransitionStage(tokenType);
+				TransitionStage countdown = new TransitionStage(tokenType,socket,address,messageArea,inputBox, username);
 				countdown.setStage(stage, false);
 			}
 		});
 
-		this.root.getChildren().addAll(canvas, token1, token2, token3, token4, backBtn, startBtn);
+		this.root.getChildren().addAll(canvas, token1, token2, token3, token4, backBtn, startBtn,getUsername);
 
 		stage.setTitle("The Pandemic Hero");
 		stage.getIcons().add(SuperStage.icon);
