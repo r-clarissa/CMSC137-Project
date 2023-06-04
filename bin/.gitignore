@@ -1,4 +1,7 @@
 /app/
+/game/
 /images/
 /stages/
-/game/
+/chat_example/
+/in_game_chat/
+/chat/

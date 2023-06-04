@@ -1,6 +1,10 @@
 package stages;
 
 import stages.SuperStage;
+
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+
 import javafx.animation.PauseTransition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -8,6 +12,8 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
@@ -28,17 +34,33 @@ public class TransitionStage {
 
 	private int tokenType;
 
+	private DatagramSocket socket;
+
+    private InetAddress address;
+
+    private TextArea messageArea;
+
+    private TextField inputBox;
+
+    private String username;
+
 	public TransitionStage() {
-		new TransitionStage(1);
+		new TransitionStage(this.tokenType,this.socket, this.address, this.messageArea, this.inputBox, this.username);
 	}
 
-	public TransitionStage(int tokenType) {
+	public TransitionStage(int tokenType, DatagramSocket socket, InetAddress address,TextArea messageArea,TextField inputBox,String username) {
 		this.root = new Group();
 		this.scene = new Scene(root, SuperStage.WINDOW_WIDTH, SuperStage.WINDOW_HEIGHT);
 
 		this.canvas = new Canvas(SuperStage.WINDOW_WIDTH, SuperStage.WINDOW_HEIGHT);
 		this.gc = canvas.getGraphicsContext2D();
 		this.tokenType = tokenType;
+		this.socket=socket;
+		this.address=address;
+		this.messageArea=messageArea;
+		this.inputBox=inputBox;
+		this.username=username;
+
 
 	}
 
@@ -80,7 +102,7 @@ public class TransitionStage {
 		gamestart.setOnFinished(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				GameStage gamestage = new GameStage(tokenType);
+				GameStage gamestage = new GameStage(tokenType,socket,address,messageArea, inputBox,username);
 				gamestage.setStage(stage);
 			}
 		});
